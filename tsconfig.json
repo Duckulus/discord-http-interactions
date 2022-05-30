@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "target": "ES6",
+    "target": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+
     "composite": true,
     "sourceMap": true,
     "removeComments": true,

@@ -1,13 +1,13 @@
-import express from "express"
-import nacl from "tweetnacl"
-import dotenv from "dotenv"
+import * as express from "express"
+import * as dotenv from "dotenv"
 import {APIInteraction, APIInteractionResponse, InteractionResponseType, InteractionType} from "discord-api-types/v10";
+import {auth} from "./auth";
 
 console.log("Hello Discord")
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
-const PUBLIC_KEY = process.env.PUBLIC_KEY
+export const PUBLIC_KEY = process.env.PUBLIC_KEY as string
 if (!PUBLIC_KEY) {
     console.error("No public key")
     process.exit(-1)
@@ -16,29 +16,10 @@ if (!PUBLIC_KEY) {
 const app = express()
 
 app.use(express.json())
+app.use(auth)
+
 
 app.post("/", (req, res) => {
-    const signature = req.headers['x-signature-ed25519'] as string;
-    const timestamp = req.headers['x-signature-timestamp'];
-
-    let isVerified;
-    let error;
-    try {
-        isVerified = nacl.sign.detached.verify(
-            Buffer.from(timestamp + JSON.stringify(req.body)),
-            Buffer.from(signature, 'hex'),
-            Buffer.from(PUBLIC_KEY, 'hex')
-        );
-    } catch (e) {
-        error = e;
-    }
-
-    if (error || !isVerified) {
-        console.log("Unauthorized Request")
-        res.status(401).send("Unauthorized")
-        return
-    }
-
     const interaction = req.body as APIInteraction
 
     switch (interaction.type) {
