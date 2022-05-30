@@ -1,13 +1,14 @@
 import express from "express"
 import nacl from "tweetnacl"
 import dotenv from "dotenv"
+import {APIInteraction, InteractionType} from "discord-api-types/v10";
 
 console.log("Hello Discord")
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
 const PUBLIC_KEY = process.env.PUBLIC_KEY
-if(!PUBLIC_KEY) {
+if (!PUBLIC_KEY) {
     console.error("No public key")
     process.exit(-1)
 }
@@ -38,13 +39,15 @@ app.post("/", (req, res) => {
         return
     }
 
-    if(req.body.type==1) {
-        console.log("Received Ping")
-        res.status(200).send({
-            "type": 1
-        })
-    }
+    const interaction = req.body as APIInteraction
 
+    switch (interaction.type) {
+        case InteractionType.Ping:
+            console.log("Received Ping")
+            res.status(200).send({
+                "type": 1
+            })
+    }
 })
 
 app.listen(PORT, () => {
