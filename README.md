@@ -13,5 +13,5 @@ This Project serves as an example for how to handle Interactions in this way.
 For instructions on how to run this project, check out the [Setup Guide](setup.md)
 
 ## Credit
-[This Blog Post](https://leftfold.tech/blog/posts/how-to-write-a-webhook-discord-bot-in-clojure/#setting-up-a-local-testing-environment) by [JohnnyJayJay](https://github.com/JohnnyJayJay)
+[This Blog Post](https://leftfold.tech/blog/posts/how-to-write-a-webhook-discord-bot-in-clojure/) by [JohnnyJayJay](https://github.com/JohnnyJayJay)
 introduced me to the topic and inspired me to make this project.
