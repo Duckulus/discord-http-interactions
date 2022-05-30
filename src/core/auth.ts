@@ -1,5 +1,5 @@
 import * as nacl from "tweetnacl";
-import {PUBLIC_KEY} from "./index";
+import {PUBLIC_KEY} from "../utils/constants";
 
 export function auth(req, res, next) {
     const signature = req.headers['x-signature-ed25519'] as string;
@@ -17,8 +17,6 @@ export function auth(req, res, next) {
         error = e;
     }
 
-    console.log(error)
-    console.log(isVerified)
     if (error || !isVerified) {
         console.log("Unauthorized Request")
         res.status(401).send("Unauthorized")
