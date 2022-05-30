@@ -1,7 +1,7 @@
 import express from "express"
 import nacl from "tweetnacl"
 import dotenv from "dotenv"
-import {APIInteraction, InteractionType} from "discord-api-types/v10";
+import {APIInteraction, APIInteractionResponse, InteractionResponseType, InteractionType} from "discord-api-types/v10";
 
 console.log("Hello Discord")
 
@@ -45,8 +45,18 @@ app.post("/", (req, res) => {
         case InteractionType.Ping:
             console.log("Received Ping")
             res.status(200).send({
-                "type": 1
-            })
+                type: InteractionResponseType.Pong,
+            } as APIInteractionResponse)
+            break;
+        case InteractionType.ApplicationCommand:
+            console.log("Received Application Command")
+            res.status(200).send({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: "Hello World"
+                }
+            } as APIInteractionResponse)
+            break;
     }
 })
 
