@@ -6,17 +6,21 @@ import {
     InteractionResponseType,
     MessageFlags
 } from "discord-api-types/v10";
-import {Command} from "./Command";
+import {ApplicationCommand} from "./ApplicationCommand";
 import {APPLICATION_ID, BOT_TOKEN, DISCORD_BASE_URL, GUILD_ID} from "../../utils/constants";
 import axios from "axios";
 import {registerSlashCommand} from "../../utils/commandRegistry";
+import {UserId} from "../../commands/userid";
+import {Reverse} from "../../commands/reverse";
 
-export const commands: { [name: string]: Command } = {}
+export const commands: { [name: string]: ApplicationCommand } = {}
 
 export const initCommands = async () => {
     await unregisterAllSlashCommands()
 
     new PingCommand()
+    new UserId()
+    new Reverse()
 
     await registerSlashCommands()
 }
@@ -58,7 +62,7 @@ const unregisterAllSlashCommands = async () => {
 const registerSlashCommands = async () => {
     for (const command of Object.values(commands)) {
         try {
-            await registerSlashCommand(command.name, command.description, command.options)
+            await registerSlashCommand(command.name, command.description,command.type, command.options)
         } catch (e) {
             console.log(`Error registering ${command.name} Command`)
             console.log(e)

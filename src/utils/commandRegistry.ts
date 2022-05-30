@@ -2,13 +2,13 @@ import {APIApplicationCommandOption, ApplicationCommandType} from "discord-api-t
 import axios from "axios";
 import {APPLICATION_ID, BOT_TOKEN, DISCORD_BASE_URL, GUILD_ID} from "./constants";
 
-export const registerSlashCommand = async (name: string, description: string, options: APIApplicationCommandOption[]) => {
+export const registerSlashCommand = async (name: string, description: string,type: ApplicationCommandType, options: APIApplicationCommandOption[] | undefined) => {
     const url = `${DISCORD_BASE_URL}/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`
 
     return await axios.post(url, {
         name: name,
         description: description,
-        type: ApplicationCommandType.ChatInput,
+        type: type,
         options: options,
         id: name,
     }, {

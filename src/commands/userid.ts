@@ -1,22 +1,23 @@
 import {ApplicationCommand} from "../core/command/ApplicationCommand";
 import {
-    APIApplicationCommandInteraction,
     APIInteractionResponse,
+    APIUserApplicationCommandInteraction,
     ApplicationCommandType,
     InteractionResponseType
 } from "discord-api-types/v10";
 
-export class PingCommand extends ApplicationCommand{
+export class UserId extends ApplicationCommand {
 
     constructor() {
-        super("ping", "Pongs", ApplicationCommandType.ChatInput,[]);
+        super("userid", "", ApplicationCommandType.User);
     }
 
-    execute(interaction: APIApplicationCommandInteraction) {
+    execute(interaction: APIUserApplicationCommandInteraction) {
+        const user = interaction.data.resolved.users[interaction.data.target_id]
         return {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: "Pong"
+                content: `${user.username}'s ID: ${interaction.data.target_id}`,
             }
         } as APIInteractionResponse
     }
