@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 console.log("Hello Discord")
 
 dotenv.config()
+const PORT = process.env.PORT || 3000
 const PUBLIC_KEY = process.env.PUBLIC_KEY
 if(!PUBLIC_KEY) {
     console.error("No public key")
@@ -46,6 +47,6 @@ app.post("/", (req, res) => {
 
 })
 
-app.listen(3000, () => {
-    console.log("Listening on port 8080")
+app.listen(PORT, () => {
+    console.log(`Listening on Port ${PORT}`)
 })
