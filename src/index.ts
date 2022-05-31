@@ -2,13 +2,14 @@ import * as express from "express"
 import {
     APIApplicationCommandInteraction,
     APIInteraction,
-    APIInteractionResponse,
+    APIInteractionResponse, APIModalSubmitInteraction,
     InteractionResponseType,
     InteractionType
 } from "discord-api-types/v10";
 import {auth} from "./core/auth";
 import {PORT} from "./utils/constants";
 import {handleCommand, initCommands} from "./core/command/commandHandler";
+import {handleModalInteraction} from "./core/component/ModalComponent";
 
 console.log("Hello Discord")
 
@@ -34,6 +35,11 @@ app.post("/", async (req, res) => {
             console.log(`Received Application Command: ${interaction.data.name}`)
 
             res.status(200).send(await handleCommand(interaction as APIApplicationCommandInteraction))
+            break;
+
+        case InteractionType.ModalSubmit:
+            console.log("Received Modal Submit")
+            res.status(200).send(await handleModalInteraction(interaction as APIModalSubmitInteraction))
     }
 })
 

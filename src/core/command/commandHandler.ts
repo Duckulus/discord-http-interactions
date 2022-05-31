@@ -12,6 +12,7 @@ import axios from "axios";
 import {registerSlashCommand} from "../../utils/commandRegistry";
 import {UserId} from "../../commands/userid";
 import {Reverse} from "../../commands/reverse";
+import {Report} from "../../commands/report";
 
 export const commands: { [name: string]: ApplicationCommand } = {}
 
@@ -21,6 +22,7 @@ export const initCommands = async () => {
     new PingCommand()
     new UserId()
     new Reverse()
+    new Report()
 
     await registerSlashCommands()
 }
