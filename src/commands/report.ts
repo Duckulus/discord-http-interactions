@@ -22,7 +22,7 @@ export class Report extends ApplicationCommand {
         return {
           type: InteractionResponseType.ChannelMessageWithSource,
           data: {
-            content: `User has been reported for ${reason}`,
+            content: `User has been reported for **${reason}**`,
             flags: MessageFlags.Ephemeral,
           },
         } as APIInteractionResponse;
