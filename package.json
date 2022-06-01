@@ -8,7 +8,7 @@
     "build": "tsc -b",
     "start": "node .",
     "build:start": "yarn clean && yarn build &&  yarn start",
-    "dev": "nodemon --exec yarn start",
+    "dev": "nodemon --exec yarn build:start",
     "clean": "rimraf dist",
     "docker:start": "docker-compose up --build",
     "docker:stop": "docker-compose down",
