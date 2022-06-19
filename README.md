@@ -18,7 +18,8 @@ This Project serves as an example for how to handle Interactions in this way.
 
 ## How to use
 
-For instructions on how to run this project, check out the [Setup Guide](setup.md)
+For instructions on how to run this project, check out the [Setup Guide](setup.md)\
+You can find the Docker image on [Docker Hub](https://hub.docker.com/repository/docker/duckulus/discord-http-interactions)
 
 ## Credit
 
