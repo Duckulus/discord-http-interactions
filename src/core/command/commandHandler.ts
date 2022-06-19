@@ -1,34 +1,21 @@
 import { PingCommand } from '../../commands/ping';
 import {
-  APIApplicationCommand,
   APIApplicationCommandInteraction,
   APIInteractionResponse,
   InteractionResponseType,
   MessageFlags,
+  Routes,
 } from 'discord-api-types/v10';
 import { ApplicationCommand } from './ApplicationCommand';
-import {
-  APPLICATION_ID,
-  BOT_TOKEN,
-  DISCORD_BASE_URL,
-  GLOBAL,
-  GUILD_ID,
-} from '../../utils/constants';
-import axios from 'axios';
-import {
-  registerGlobalCommand,
-  registerGuildCommand,
-} from '../../utils/commandRegistry';
+import { APPLICATION_ID, GLOBAL, GUILD_ID } from '../../utils/constants';
 import { UserId } from '../../commands/userid';
 import { Reverse } from '../../commands/reverse';
 import { Report } from '../../commands/report';
+import { discordRest } from '../rest/rest';
 
 export const commands: { [name: string]: ApplicationCommand } = {};
 
 export const initCommands = async () => {
-  await unregisterGuildCommands();
-  await unregisterGlobalCommands();
-
   new PingCommand();
   new UserId();
   new Reverse();
@@ -59,71 +46,44 @@ export const handleCommand = async (
 };
 
 const registerGuildCommands = async () => {
-  for (const command of Object.values(commands)) {
-    try {
-      await registerGuildCommand(
-        command.name,
-        command.description,
-        command.type,
-        command.options
-      );
-      console.log(`Registered ${command.name} Command in guild`);
-    } catch (e) {
-      console.log(`Error registering ${command.name} Command`);
-      console.log(e);
-    }
-  }
-};
-
-const unregisterGuildCommands = async () => {
-  const url = `${DISCORD_BASE_URL}/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`;
-  const resp = await axios.get(url, {
-    headers: {
-      Authorization: `Bot ${BOT_TOKEN}`,
-    },
+  const slashCommands = Object.values(commands).map((cmd) => {
+    return {
+      name: cmd.name,
+      description: cmd.description,
+      options: cmd.options,
+      type: cmd.type,
+    };
   });
-  const registeredCommands = resp.data as APIApplicationCommand[];
-  for (const cmd of registeredCommands) {
-    const url = `${DISCORD_BASE_URL}/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands/${cmd.id}`;
-    await axios.delete(url, {
-      headers: {
-        Authorization: `Bot ${BOT_TOKEN}`,
-      },
-    });
+  try {
+    await discordRest.put(
+      Routes.applicationGuildCommands(APPLICATION_ID, GUILD_ID),
+      {
+        body: slashCommands,
+      }
+    );
+    console.log(`Succesfully overwrote application commands in guild`);
+  } catch (e) {
+    console.log(`Error registering application commands in guild`);
+    console.log(e);
   }
 };
 
 const registerGlobalCommands = async () => {
-  for (const command of Object.values(commands)) {
-    try {
-      await registerGlobalCommand(
-        command.name,
-        command.description,
-        command.type,
-        command.options
-      );
-      console.log(`Registered ${command.name} Command globally`);
-    } catch (e) {
-      console.log(`Error registering ${command.name} Command`);
-      console.log(e);
-    }
-  }
-};
-
-const unregisterGlobalCommands = async () => {
-  const url = `${DISCORD_BASE_URL}/applications/${APPLICATION_ID}/commands`;
-  const resp = await axios.get(url, {
-    headers: {
-      Authorization: `Bot ${BOT_TOKEN}`,
-    },
+  const slashCommands = Object.values(commands).map((cmd) => {
+    return {
+      name: cmd.name,
+      description: cmd.description,
+      options: cmd.options,
+      type: cmd.type,
+    };
   });
-  const registeredCommands = resp.data as APIApplicationCommand[];
-  for (const cmd of registeredCommands) {
-    const url = `${DISCORD_BASE_URL}/applications/${APPLICATION_ID}/commands/${cmd.id}`;
-    await axios.delete(url, {
-      headers: {
-        Authorization: `Bot ${BOT_TOKEN}`,
-      },
+  try {
+    await discordRest.put(Routes.applicationCommands(APPLICATION_ID), {
+      body: slashCommands,
     });
+    console.log(`Succesfully overwrote application commands globally`);
+  } catch (e) {
+    console.log(`Error registering application commands globally`);
+    console.log(e);
   }
 };

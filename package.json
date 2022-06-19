@@ -15,6 +15,7 @@
     "docker:deploy": "docker-compose up --build -d"
   },
   "dependencies": {
+    "@discordjs/rest": "^0.5.0",
     "axios": "^0.27.2",
     "discord-api-types": "^0.33.1",
     "dotenv": "^16.0.1",
